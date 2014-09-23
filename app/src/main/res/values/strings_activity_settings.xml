@@ -1,0 +1,10 @@
+<resources>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Example General settings -->
+    <string name="pref_header_general">General</string>
+    <string name="pref_title_ip">Controller IP</string>
+    <string name="pref_default_ip">192.168.1.1</string>
+    <string name="pref_summary_ip">The IP address of the controller</string>
+
+</resources>
