@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
 import android.view.MenuItem;
+import jacquette.com.homeautomationdemo.devices.Device;
 
 public class DeviceListActivity extends Activity
         implements DeviceListFragment.Callbacks {
@@ -27,11 +28,12 @@ public class DeviceListActivity extends Activity
     }
 
     @Override
-    public void onItemSelected(String id) {
+    public void onItemSelected(Device device) {
+
         if (mTwoPane) {
             Bundle arguments = new Bundle();
-            arguments.putString(DeviceDetailFragment.ARG_ITEM_ID, id);
-            DeviceDetailFragment fragment = new DeviceDetailFragment();
+
+            DeviceDetailFragment fragment = DeviceDetailFragment.newInstance();
             fragment.setArguments(arguments);
             getFragmentManager().beginTransaction()
                     .replace(R.id.device_detail_container, fragment)
@@ -39,7 +41,7 @@ public class DeviceListActivity extends Activity
 
         } else {
             Intent detailIntent = new Intent(this, DeviceDetailActivity.class);
-            detailIntent.putExtra(DeviceDetailFragment.ARG_ITEM_ID, id);
+            detailIntent.putExtra(DeviceDetailFragment.PARCEL, device);
             startActivity(detailIntent);
         }
     }

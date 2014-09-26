@@ -3,27 +3,36 @@ package jacquette.com.homeautomationdemo;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
-
 import android.view.MenuItem;
 
+import jacquette.com.homeautomationdemo.devices.BinarySwitch;
+import jacquette.com.homeautomationdemo.devices.Device;
+
 public class DeviceDetailActivity extends Activity {
+
+    public int mDeviceId;
+    public Device device;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_device_detail);
 
+        // TODO get args - two pane mode
+        Bundle extras = getIntent().getExtras();
+        device = extras.getParcelable(DeviceDetailFragment.PARCEL);
+        mDeviceId = device.getId();
+
         // Show the Up button in the action bar.
         getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setTitle(device.getName());
 
+        // attach fragment
         if (savedInstanceState == null) {
-            Bundle arguments = new Bundle();
-            arguments.putString(DeviceDetailFragment.ARG_ITEM_ID,
-                    getIntent().getStringExtra(DeviceDetailFragment.ARG_ITEM_ID));
-            DeviceDetailFragment fragment = new DeviceDetailFragment();
-            fragment.setArguments(arguments);
-            getFragmentManager().beginTransaction()
-                    .add(R.id.device_detail_container, fragment)
+            DeviceDetailFragment fragment = DeviceDetailFragment.newInstance();
+            getFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.device_detail_container, fragment, fragment.TAG)
                     .commit();
         }
     }
@@ -37,4 +46,5 @@ public class DeviceDetailActivity extends Activity {
         }
         return super.onOptionsItemSelected(item);
     }
+
 }

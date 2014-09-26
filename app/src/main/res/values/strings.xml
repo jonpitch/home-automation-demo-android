@@ -3,5 +3,9 @@
 
     <string name="app_name">Home Automation Demo</string>
     <string name="title_device_detail">Device Detail</string>
+    <string name="communication_error">Oh noes!</string>
+
+    <string name="binary_switch_on">On</string>
+    <string name="binary_switch_off">Off</string>
 
 </resources>

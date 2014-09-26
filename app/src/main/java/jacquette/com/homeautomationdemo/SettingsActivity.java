@@ -23,6 +23,7 @@ import java.util.List;
 public class SettingsActivity extends PreferenceActivity {
 
     private static final boolean ALWAYS_SIMPLE_PREFS = false;
+    public static final String CONTROLLER_IP = "controller_ip";
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
