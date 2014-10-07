@@ -5,4 +5,9 @@
         android:orderInCategory="100"
         android:showAsAction="never" />
 
+    <item android:id="@+id/action_beacon_demo"
+        android:title="Beacons"
+        android:orderInCategory="99"
+        android:showAsAction="never" />
+
 </menu>

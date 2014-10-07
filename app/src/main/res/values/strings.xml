@@ -8,5 +8,8 @@
     <string name="binary_switch_on">On</string>
     <string name="binary_switch_off">Off</string>
     <string name="nfc_text_default">NFC Tag Scanned</string>
+    <string name="title_activity_beacon_distance_demo">Beacon Distance Demo</string>
+    <string name="beacon_message1">Walk toward the light...</string>
+    <string name="beacon_message2">or walk away...</string>
 
 </resources>

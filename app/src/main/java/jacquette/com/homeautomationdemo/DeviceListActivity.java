@@ -59,6 +59,10 @@ public class DeviceListActivity extends Activity
             Intent settings = new Intent(this, SettingsActivity.class);
             startActivity(settings);
             return true;
+        } else if (id == R.id.action_beacon_demo) {
+            Intent beaconDemo = new Intent(this, BeaconDistanceDemo.class);
+            startActivity(beaconDemo);
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
