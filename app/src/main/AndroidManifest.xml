@@ -2,8 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="jacquette.com.homeautomationdemo" >
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.NFC" />
+
+    <uses-feature
+        android:name="android.hardware.nfc"
+        android:required="true" />
 
     <application
         android:allowBackup="true"
@@ -30,6 +35,25 @@
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings" >
+        </activity>
+
+        <!-- The activity that handles NFC intents -->
+        <activity
+            android:name=".NfcDiscovered"
+            android:label="@string/title_nfc_activity" >
+
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
+                <action android:name="android.nfc.action.TAG_DISCOVERED"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+                <data android:scheme="had"
+                    android:host="binary"
+                    android:pathPrefix="/4/on" />
+                <data android:scheme="had"
+                    android:host="binary"
+                    android:pathPrefix="/4/off" />
+            </intent-filter>
+
         </activity>
     </application>
 
