@@ -2,10 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="8dp"
     android:minHeight="?android:attr/listPreferredItemHeight"
     android:orientation="vertical">
-
-    <!-- TODO style this -->
 
     <TextView
         android:layout_width="wrap_content"
@@ -13,5 +12,12 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Device Name"
         android:id="@+id/device_list_name" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="status"
+        android:id="@+id/device_list_status" />
 
 </LinearLayout>

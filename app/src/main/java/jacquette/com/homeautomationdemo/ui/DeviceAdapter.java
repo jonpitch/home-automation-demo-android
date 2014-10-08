@@ -9,10 +9,16 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import butterknife.Optional;
 import jacquette.com.homeautomationdemo.R;
 import jacquette.com.homeautomationdemo.devices.Device;
 
 public class DeviceAdapter extends ArrayAdapter<Device> {
+
+    @Optional @InjectView(R.id.device_list_name) TextView mDeviceName;
+    @Optional @InjectView(R.id.device_list_status) TextView mDeviceStatus;
 
     public DeviceAdapter(Context context, int resource, List<Device> devices) {
         super(context, resource, devices);
@@ -26,11 +32,10 @@ public class DeviceAdapter extends ArrayAdapter<Device> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.device_list_item, parent, false);
         }
 
-        // TODO butterknife, view holder, animate, cards?
-
-        // inflate views
-        TextView deviceName = (TextView) convertView.findViewById(R.id.device_list_name);
-        deviceName.setText(device.getName());
+        // view injection
+        ButterKnife.inject(this, convertView);
+        mDeviceName.setText(device.getName());
+        mDeviceStatus.setText(device.getIsOn() ? "On" : "Off");
 
         return convertView;
     }
