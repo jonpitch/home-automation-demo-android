@@ -82,6 +82,7 @@ public class DeviceDetailFragment extends Fragment {
             rootView = inflater.inflate(R.layout.multilevel_switch_layout, container, false);
             ButterKnife.inject(this, rootView);
 
+            // TODO set seekbar to current level
             if (parent.device.getIsOn()) {
                 drawToggleOn(mMultiLevelToggle);
             } else {
@@ -91,11 +92,29 @@ public class DeviceDetailFragment extends Fragment {
             mMultiLevelToggle.setOnClickListener(mMultiLevelListener);
             mMultiLevelSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
 
-                private boolean mTracking = false;
+                private int mStepSize = 5;
+                private int mCurrentProgress = 0;
 
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                    android.util.Log.i("SEEK", String.valueOf(i));
+                    int progress = (Math.round(i / mStepSize)) * mStepSize;
+
+                    // trying to cut down on the network requests a bit
+                    if (progress != mCurrentProgress) {
+                        seekBar.setProgress(progress);
+                        mCurrentProgress = progress;
+                        ((MultiLevelSwitch) parent.device).setLevel(parent, mCurrentProgress, new Callback<Void>() {
+                            @Override
+                            public void success(Void aVoid, Response response) {
+
+                            }
+
+                            @Override
+                            public void failure(RetrofitError error) {
+
+                            }
+                        });
+                    }
                 }
 
                 @Override
