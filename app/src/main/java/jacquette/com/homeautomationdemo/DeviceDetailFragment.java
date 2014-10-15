@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.SeekBar;
 import android.widget.Toast;
 
 import butterknife.ButterKnife;
@@ -14,6 +15,7 @@ import butterknife.InjectView;
 import butterknife.Optional;
 import jacquette.com.homeautomationdemo.devices.BinarySwitch;
 import jacquette.com.homeautomationdemo.devices.Device;
+import jacquette.com.homeautomationdemo.devices.MultiLevelSwitch;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -25,6 +27,8 @@ public class DeviceDetailFragment extends Fragment {
 
     // views - depending on the layout returned
     @Optional @InjectView(R.id.binary_switch_toggle) Button mBinaryToggle;
+    @Optional @InjectView(R.id.multilevel_switch_toggle) Button mMultiLevelToggle;
+    @Optional @InjectView(R.id.multilevel_swtich_seekbar) SeekBar mMultiLevelSeekBar;
 
     public static DeviceDetailFragment newInstance() {
         DeviceDetailFragment fragment = new DeviceDetailFragment();
@@ -68,12 +72,42 @@ public class DeviceDetailFragment extends Fragment {
             ButterKnife.inject(this, rootView);
 
             if (parent.device.getIsOn()) {
-                drawBinaryToggleOn();
+                drawToggleOn(mBinaryToggle);
             } else {
-                drawBinaryToggleOff();
+                drawToggleOff(mBinaryToggle);
             }
 
-            mBinaryToggle.setOnClickListener(mBinaryClickListener);
+            mBinaryToggle.setOnClickListener(mBinaryToggleListener);
+        } else if (parent.device != null && parent.device instanceof MultiLevelSwitch) {
+            rootView = inflater.inflate(R.layout.multilevel_switch_layout, container, false);
+            ButterKnife.inject(this, rootView);
+
+            if (parent.device.getIsOn()) {
+                drawToggleOn(mMultiLevelToggle);
+            } else {
+                drawToggleOff(mMultiLevelToggle);
+            }
+
+            mMultiLevelToggle.setOnClickListener(mMultiLevelListener);
+            mMultiLevelSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+                private boolean mTracking = false;
+
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                    android.util.Log.i("SEEK", String.valueOf(i));
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+
+                }
+            });
         } else {
             rootView = inflater.inflate(R.layout.fragment_device_detail, container, false);
         }
@@ -86,7 +120,7 @@ public class DeviceDetailFragment extends Fragment {
     /**
      *  The click listener for a binary switch.
      */
-    private View.OnClickListener mBinaryClickListener = new View.OnClickListener() {
+    private View.OnClickListener mBinaryToggleListener = new View.OnClickListener() {
 
         @Override
         public void onClick(View view) {
@@ -98,9 +132,9 @@ public class DeviceDetailFragment extends Fragment {
                 @Override
                 public void success(Void aVoid, Response response) {
                     if (oldState) {
-                        drawBinaryToggleOff();
+                        drawToggleOff(mBinaryToggle);
                     } else {
-                        drawBinaryToggleOn();
+                        drawToggleOn(mBinaryToggle);
                     }
                 }
 
@@ -120,20 +154,50 @@ public class DeviceDetailFragment extends Fragment {
     };
 
     /**
-     * Draw the binary toggle button in the On state
+     *  The click listener for a multilevel switch.
      */
-    private void drawBinaryToggleOn() {
-        mBinaryToggle.setText(getString(R.string.binary_switch_on));
-        mBinaryToggle.setBackgroundColor(getResources()
+    private View.OnClickListener mMultiLevelListener = new View.OnClickListener() {
+
+        @Override
+        public void onClick(View view) {
+            final DeviceDetailActivity parent = (DeviceDetailActivity) getActivity();
+            Device device = parent.device;
+            final boolean oldState = device.getIsOn();
+
+            Callback<Void> callback = new Callback<Void>() {
+                @Override
+                public void success(Void aVoid, Response response) {
+                    if (oldState) {
+                        drawToggleOff(mMultiLevelToggle);
+                    } else {
+                        drawToggleOn(mMultiLevelToggle);
+                    }
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Toast t = Toast.makeText(parent, getString(R.string.communication_error), Toast.LENGTH_SHORT);
+                    t.show();
+                }
+            };
+
+            if (oldState) {
+                device.off(parent, callback);
+            } else {
+                device.on(parent, callback);
+            }
+        }
+    };
+
+    private void drawToggleOn(Button button) {
+        button.setText(getString(R.string.binary_switch_on));
+        button.setBackgroundColor(getResources()
                 .getColor(android.R.color.holo_blue_bright));
     }
 
-    /**
-     * Draw the binary toggle button in the Off state
-     */
-    private void drawBinaryToggleOff() {
-        mBinaryToggle.setText(getString(R.string.binary_switch_off));
-        mBinaryToggle.setBackgroundColor(getResources()
+    private void drawToggleOff(Button button) {
+        button.setText(getString(R.string.binary_switch_off));
+        button.setBackgroundColor(getResources()
                 .getColor(android.R.color.darker_gray));
     }
 }

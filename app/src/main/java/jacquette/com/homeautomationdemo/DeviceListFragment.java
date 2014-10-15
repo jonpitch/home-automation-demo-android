@@ -19,6 +19,7 @@ import jacquette.com.homeautomationdemo.api.ZService;
 import jacquette.com.homeautomationdemo.api.response.DevicesResponse;
 import jacquette.com.homeautomationdemo.devices.BinarySwitch;
 import jacquette.com.homeautomationdemo.devices.Device;
+import jacquette.com.homeautomationdemo.devices.MultiLevelSwitch;
 import jacquette.com.homeautomationdemo.ui.DeviceAdapter;
 
 public class DeviceListFragment extends ListFragment {
@@ -117,6 +118,12 @@ public class DeviceListFragment extends ListFragment {
                         String[] idParts = parts[1].split(":");
 
                         mDevices.add(new BinarySwitch(Integer.valueOf(idParts[0]), d.metrics.title, on));
+                    } else if (d.deviceType.equals("switchMultilevel")) {
+                        boolean on = d.metrics.level.equals("0") ? false : true;
+                        String[] parts = d.metrics.title.split(" ");
+                        String[] idParts = parts[1].split(":");
+
+                        mDevices.add(new MultiLevelSwitch(Integer.valueOf(idParts[0]), d.metrics.title, on));
                     }
                 }
 

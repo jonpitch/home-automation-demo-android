@@ -5,6 +5,7 @@ import retrofit.Callback;
 import retrofit.http.GET;
 import retrofit.http.POST;
 import retrofit.http.Path;
+import retrofit.http.Query;
 
 public interface ZService {
 
@@ -24,6 +25,13 @@ public interface ZService {
     void toggleBinarySwitch(
             @Path("id") int deviceId,
             @Path("toggle") int toggle,
+            Callback<Void> callback
+    );
+
+    @POST("/ZWaveAPI/Run/devices[{id}].instances[0].SwitchMultilevel.Set({level})")
+    void toggleMultiLevelSwitch(
+            @Path("id") int deviceId,
+            @Path("level") int level,
             Callback<Void> callback
     );
 }
